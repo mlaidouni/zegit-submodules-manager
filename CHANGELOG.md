@@ -4,6 +4,8 @@ All notable changes to the "zegit-submodules-manager" extension will be document
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## 0.1.0 (2024-10-21)
 
-- Initial release
+### Feat
+
+- affichage des submodules dans un panel de l'explorateur
