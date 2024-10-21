@@ -1,65 +1,60 @@
-# zegit-submodules-manager README
+# zegit-submodules-manager README <!-- omit in toc -->
 
-This is the README for your extension "zegit-submodules-manager". After writing up a brief description, we recommend including the following sections.
+## Table of Contents <!-- omit in toc -->
 
-## Features
+1. [Description](#description)
+2. [Fonctionnalités](#fonctionnalités)
+3. [Installation](#installation)
+4. [Utilisation](#utilisation)
+5. [Commandes](#commandes)
+6. [Développement](#développement)
+	1. [Structure du projet](#structure-du-projet)
+	2. [Lancer l'extension en mode développement](#lancer-lextension-en-mode-développement)
+7. [Contribution](#contribution)
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## Description
 
-For example if there is an image subfolder under your extension project workspace:
+"zegit-submodules-manager" est une extension Visual Studio Code qui facilite la gestion des sous-modules Git dans vos projets. Cette extension vous permet de visualiser, initialiser, mettre à jour et gérer les sous-modules directement depuis l'interface de VS Code.
 
-\!\[feature X\]\(images/feature-x.png\)
+## Fonctionnalités
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- **Visualisation des sous-modules** : Affichez la liste des sous-modules de votre projet avec leur état actuel.
+- **Initialisation des sous-modules** : Initialisez les sous-modules non initialisés.
+- **Mise à jour des sous-modules** : Mettez à jour les sous-modules pour qu'ils pointent vers les derniers commits.
+- **Icônes d'état** : Visualisez l'état des sous-modules avec des icônes (initialisé, non initialisé, en avance, en retard).
 
-## Requirements
+## Installation
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+1. Ouvrez Visual Studio Code.
+2. Allez dans l'onglet des extensions (`Ctrl+Shift+X` ou `Cmd+Shift+X` sur Mac).
+3. Recherchez "zegit-submodules-manager".
+4. Cliquez sur "Installer".
 
-## Extension Settings
+## Utilisation
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+1. Ouvrez un projet contenant des sous-modules Git.
+2. Ouvrez la vue des sous-modules en utilisant la commande `Ctrl+Shift+P` (ou `Cmd+Shift+P` sur Mac) et en tapant `ZeGit Submodules: Refresh View`.
+3. La liste des sous-modules s'affichera dans la barre latérale.
 
-For example:
+## Commandes
 
-This extension contributes the following settings:
+- `zegit-submodules-manager.openSubmodule` : Ouvre le sous-module sélectionné dans l'explorateur de fichiers.
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## Développement
 
-## Known Issues
+### Structure du projet
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- `src/extension.js` : Fichier principal où l'extension est activée.
+- `src/submodulesTreeView.js` : Implémentation de la vue des sous-modules.
+- `test/extension.test.js` : Tests unitaires pour l'extension.
 
-## Release Notes
+### Lancer l'extension en mode développement
 
-Users appreciate release notes as you update your extension.
+1. Clonez le dépôt de l'extension.
+2. Ouvrez le dossier du projet dans VS Code.
+3. Appuyez sur `F5` pour lancer une nouvelle fenêtre VS Code avec l'extension chargée.
+4. Utilisez la palette de commandes (`Ctrl+Shift+P` ou `Cmd+Shift+P` sur Mac) pour exécuter les commandes de l'extension.
 
-### 1.0.0
+## Contribution
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Les contributions sont les bienvenues ! Veuillez soumettre des pull requests ou ouvrir des issues pour signaler des bugs ou proposer des améliorations.
