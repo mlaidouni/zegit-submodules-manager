@@ -1,34 +1,72 @@
 {
-  "name": "zegit-submodules-manager",
-  "displayName": "ZeGit Submodules Manager",
-  "description": "A manager for Git submodules",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.94.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./extension.js",
-  "contributes": {
-    "commands": [{
-      "command": "zegit-submodules-manager.helloWorld",
-      "title": "Hello World"
-    }]
-  },
-  "scripts": {
-    "lint": "eslint .",
-    "pretest": "npm run lint",
-    "test": "vscode-test"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.94.0",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "20.x",
-    "eslint": "^8.57.0",
-    "typescript": "^5.4.5",
-    "@vscode/test-cli": "^0.0.9",
-    "@vscode/test-electron": "^2.4.0"
-  }
+	"name": "zegit-submodules-manager",
+	"displayName": "ZeGit Submodules Manager",
+	"description": "A VS Code extension to manage Git submodules",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.94.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"main": "src/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "zegit-submodules-manager.helloWorld",
+				"title": "ZeGit Submodules Hello World"
+			},
+			{
+				"command": "zegit-submodules-manager.initAllSubmodules",
+				"title": "ZeGit Submodules Initialize All Submodules"
+			},
+			{
+				"command": "zegit-submodules-manager.initSpecificSubmodule",
+				"title": "ZeGit Submodules Initialize Specific Submodule"
+			},
+			{
+				"command": "zegit-submodules-manager.deinitAllSubmodules",
+				"title": "ZeGit Submodules Deinitialize All Submodules"
+			},
+			{
+				"command": "zegit-submodules-manager.deinitSpecificSubmodule",
+				"title": "ZeGit Submodules Deinitialize Specific Submodule"
+			},
+			{
+				"command": "zegit-submodules-manager.refreshSubmodules",
+				"title": "ZeGit Submodules Refresh Submodules View"
+			}
+		],
+		"views": {
+			"explorer": [
+				{
+					"id": "submodulesView",
+					"name": "Submodules"
+				}
+			]
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "submodulesManager",
+					"title": "ZeGit Submodules Submodules Manager",
+					"icon": "resources/git.svg"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"lint": "eslint .",
+		"pretest": "npm run lint",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@types/mocha": "^10.0.6",
+		"@types/node": "20.x",
+		"@types/vscode": "^1.94.0",
+		"@vscode/test-cli": "^0.0.9",
+		"@vscode/test-electron": "^2.4.0",
+		"eslint": "^8.57.0",
+		"typescript": "^5.4.5"
+	}
 }
