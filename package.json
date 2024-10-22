@@ -31,14 +31,7 @@
 	"pricing": "Free",
 	"icon": "resources/icon.png",
 	"main": "src/extension.js",
-	"activationEvents": [
-		"onCommand:zegit-submodules-manager.helloWorld",
-		"onCommand:zegit-submodules-manager.initAllSubmodules",
-		"onCommand:zegit-submodules-manager.initSpecificSubmodule",
-		"onCommand:zegit-submodules-manager.deinitAllSubmodules",
-		"onCommand:zegit-submodules-manager.deinitSpecificSubmodule",
-		"onCommand:zegit-submodules-manager.refreshSubmodules"
-	],
+	"activationEvents": [],
 	"contributes": {
 		"commands": [
 			{
@@ -67,7 +60,7 @@
 			}
 		],
 		"views": {
-			"explorer": [
+			"scm": [
 				{
 					"id": "submodulesView",
 					"name": "Submodules"
