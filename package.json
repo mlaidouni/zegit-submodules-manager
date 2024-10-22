@@ -1,7 +1,11 @@
 {
+	"publisher": "Kmzx",
+	"author": {
+		"name": "ZeKmzx"
+	},
 	"name": "zegit-submodules-manager",
 	"displayName": "ZeGit Submodules Manager",
-	"description": "A VS Code extension to manage Git submodules",
+	"description": "Supercharged Git: manage Git submodules",
 	"version": "0.1.0",
 	"repository": {
 		"type": "git",
@@ -11,8 +15,20 @@
 		"vscode": "^1.94.0"
 	},
 	"categories": [
-		"Other"
+		"SCM Providers"
 	],
+	"bugs": {
+		"url": "https://github.com/mlaidouni/zegit-submodules-manager/issues"
+	},
+	"keywords": [
+		"submodule",
+		"submodules",
+		"git submodule",
+		"git submodules",
+		"git",
+		"zemizer"
+	],
+	"pricing": "Free",
 	"icon": "resources/icon.png",
 	"main": "src/extension.js",
 	"activationEvents": [
