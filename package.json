@@ -36,31 +36,37 @@
 		"commands": [
 			{
 				"command": "zegit-submodules-manager.helloWorld",
-				"title": "ZeGit Submodules Hello World"
+				"title": "Hello World",
+				"category": "ZeGit"
 			},
 			{
 				"command": "zegit-submodules-manager.initAllSubmodules",
-				"title": "ZeGit Submodules Initialize All Submodules"
+				"title": "Initialize All Submodules",
+				"category": "ZeGit"
 			},
 			{
 				"command": "zegit-submodules-manager.initSpecificSubmodule",
-				"title": "ZeGit Submodules Initialize Specific Submodule"
+				"title": "Initialize Specific Submodule",
+				"category": "ZeGit"
 			},
 			{
 				"command": "zegit-submodules-manager.deinitAllSubmodules",
-				"title": "ZeGit Submodules Deinitialize All Submodules"
+				"title": "Deinitialize All Submodules",
+				"category": "ZeGit"
 			},
 			{
 				"command": "zegit-submodules-manager.deinitSpecificSubmodule",
-				"title": "ZeGit Submodules Deinitialize Specific Submodule"
+				"title": "Deinitialize Specific Submodule",
+				"category": "ZeGit"
 			},
 			{
 				"command": "zegit-submodules-manager.refreshSubmodules",
-				"title": "ZeGit Submodules Refresh Submodules View"
+				"title": "Refresh Submodules View",
+				"category": "ZeGit"
 			}
 		],
 		"views": {
-			"scm": [
+			"zegit": [
 				{
 					"id": "submodulesView",
 					"name": "Submodules"
@@ -70,8 +76,8 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "submodulesManager",
-					"title": "ZeGit Submodules Submodules Manager",
+					"id": "zegit",
+					"title": "ZeGit",
 					"icon": "resources/git.svg"
 				}
 			]
