@@ -1,0 +1,12 @@
+BasedOnStyle: Google
+UseTab: ForIndentation
+IndentWidth: 4
+TabWidth: 4
+SpaceInEmptyBlock: true
+AllowShortBlocksOnASingleLine: true
+BraceWrapping:
+  AfterControlStatement: false
+  AfterFunction: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
