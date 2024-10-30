@@ -1,200 +1,147 @@
-const vscode = require("vscode");
-const { exec } = require("child_process");
-const { SubmodulesProvider } = require("./submodulesTreeView");
+const vscode = require('vscode');
+const {SubmodulesProvider} = require('./submodulesTreeView');
+const {logCommand, logOutput, logError} = require('./logger');
+const {executeGitCommand} = require('./gitCommands');
+const {getSubmodules} = require('./utils');
 
-// This method is called when your extension is activated
 function activate(context) {
-  console.log(
-    'Congratulations, your extension "zegit-submodules-manager" is now active!'
-  );
+	console.log(
+	    'Congratulations, your extension "zegit-submodules-manager" is now active!');
 
-  // TreeView Provider for Submodules
-  const workspaceFolders = vscode.workspace.workspaceFolders;
-  if (!workspaceFolders || workspaceFolders.length === 0) {
-    vscode.window.showErrorMessage("Aucun projet ouvert.");
-    return;
-  }
+	const workspaceFolders = vscode.workspace.workspaceFolders;
+	if (!workspaceFolders || workspaceFolders.length === 0) {
+		vscode.window.showErrorMessage('Aucun projet ouvert.');
+		return;
+	}
 
-  const rootPath = workspaceFolders[0].uri.fsPath;
-  const submodulesProvider = new SubmodulesProvider(rootPath);
+	const rootPath = workspaceFolders[0].uri.fsPath;
+	const submodulesProvider = new SubmodulesProvider(rootPath);
 
-  // Register the TreeView
-  vscode.window.registerTreeDataProvider("submodulesView", submodulesProvider);
+	vscode.window.registerTreeDataProvider(
+	    'submodulesView', submodulesProvider);
 
-  // Command: Refresh the TreeView
-  const refreshSubmodulesCommand = vscode.commands.registerCommand(
-    "zegit-submodules-manager.refreshSubmodules",
-    () => submodulesProvider.refresh()
-  );
+	const refreshSubmodulesCommand = vscode.commands.registerCommand(
+	    'zegit-submodules-manager.refreshSubmodules',
+	    () => submodulesProvider.refresh());
 
-  // Command: Initialize all submodules
-  const initAllSubmodulesCommand = vscode.commands.registerCommand(
-    "zegit-submodules-manager.initAllSubmodules",
-    function () {
-      exec(
-        "git submodule update --init --recursive",
-        { cwd: rootPath },
-        (err, stdout, stderr) => {
-          if (err) {
-            vscode.window.showErrorMessage(
-              `Erreur lors de l'initialisation des submodules : ${stderr}`
-            );
-            return;
-          }
-          vscode.window.showInformationMessage(
-            "Tous les submodules ont été initialisés."
-          );
-          submodulesProvider.refresh(); // Refresh the TreeView after updating
-        }
-      );
-    }
-  );
+	const initAllSubmodulesCommand = vscode.commands.registerCommand(
+	    'zegit-submodules-manager.initAllSubmodules', function() {
+		    const command = 'git submodule update --init --recursive';
+		    executeGitCommand(command, {cwd: rootPath}, (err) => {
+			    if (err) {
+				    vscode.window.showErrorMessage(
+				        `Erreur lors de l'initialisation des submodules : ${
+					        err.message}`);
+				    return;
+			    }
+			    vscode.window.showInformationMessage(
+			        'Tous les submodules ont été initialisés.');
+			    submodulesProvider.refresh();
+		    });
+	    });
 
-  // Command: Initialize specific submodule
-  const initSpecificSubmoduleCommand = vscode.commands.registerCommand(
-    "zegit-submodules-manager.initSpecificSubmodule",
-    async function () {
-      exec(
-        "git config --file .gitmodules --name-only --get-regexp path",
-        { cwd: rootPath },
-        async (err, stdout, stderr) => {
-          if (err || stderr) {
-            vscode.window.showErrorMessage(
-              `Erreur lors de la récupération des submodules : ${stderr}`
-            );
-            return;
-          }
+	const initSpecificSubmoduleCommand = vscode.commands.registerCommand(
+	    'zegit-submodules-manager.initSpecificSubmodule', async function() {
+		    getSubmodules(rootPath, async (err, submodules) => {
+			    if (err) {
+				    vscode.window.showErrorMessage(
+				        `Erreur lors de la récupération des submodules : ${
+					        err.message}`);
+				    return;
+			    }
 
-          const submodules = stdout
-            .trim()
-            .split("\n")
-            .map((line) => line.replace("submodule.", "").replace(".path", ""));
+			    if (submodules.length === 0) {
+				    vscode.window.showWarningMessage('Aucun submodule trouvé.');
+				    return;
+			    }
 
-          if (submodules.length === 0) {
-            vscode.window.showWarningMessage("Aucun submodule trouvé.");
-            return;
-          }
+			    const selectedSubmodule =
+			        await vscode.window.showQuickPick(submodules, {
+				        placeHolder: 'Sélectionnez le submodule à initialiser',
+			        });
 
-          const selectedSubmodule = await vscode.window.showQuickPick(
-            submodules,
-            {
-              placeHolder: "Sélectionnez le submodule à initialiser",
-            }
-          );
+			    if (selectedSubmodule) {
+				    const command =
+				        `git submodule update --init ${selectedSubmodule}`;
+				    executeGitCommand(command, {cwd: rootPath}, (err) => {
+					    if (err) {
+						    vscode.window.showErrorMessage(
+						        `Erreur lors de l'initialisation du submodule ${
+							        selectedSubmodule} : ${err.message}`);
+						    return;
+					    }
+					    vscode.window.showInformationMessage(`Le submodule ${
+						    selectedSubmodule} a été initialisé.`);
+					    submodulesProvider.refresh();
+				    });
+			    }
+		    });
+	    });
 
-          if (selectedSubmodule) {
-            exec(
-              `git submodule update --init ${selectedSubmodule}`,
-              { cwd: rootPath },
-              (err, stdout, stderr) => {
-                if (err) {
-                  vscode.window.showErrorMessage(
-                    `Erreur lors de l'initialisation du submodule ${selectedSubmodule} : ${stderr}`
-                  );
-                  return;
-                }
-                vscode.window.showInformationMessage(
-                  `Le submodule ${selectedSubmodule} a été initialisé.`
-                );
-                submodulesProvider.refresh(); // Refresh the TreeView after updating
-              }
-            );
-          }
-        }
-      );
-    }
-  );
+	const deinitAllSubmodulesCommand = vscode.commands.registerCommand(
+	    'zegit-submodules-manager.deinitAllSubmodules', function() {
+		    const command = 'git submodule deinit --all';
+		    executeGitCommand(command, {cwd: rootPath}, (err) => {
+			    if (err) {
+				    vscode.window.showErrorMessage(
+				        `Erreur lors de la désinitialisation des submodules : ${
+					        err.message}`);
+				    return;
+			    }
+			    vscode.window.showInformationMessage(
+			        'Tous les submodules ont été désinitialisés.');
+			    submodulesProvider.refresh();
+		    });
+	    });
 
-  // Command: Deinitialize all submodules
-  const deinitAllSubmodulesCommand = vscode.commands.registerCommand(
-    "zegit-submodules-manager.deinitAllSubmodules",
-    function () {
-      exec(
-        "git submodule deinit --all",
-        { cwd: rootPath },
-        (err, stdout, stderr) => {
-          if (err) {
-            vscode.window.showErrorMessage(
-              `Erreur lors de la désinitialisation des submodules : ${stderr}`
-            );
-            return;
-          }
-          vscode.window.showInformationMessage(
-            "Tous les submodules ont été désinitialisés."
-          );
-          submodulesProvider.refresh(); // Refresh the TreeView after updating
-        }
-      );
-    }
-  );
+	const deinitSpecificSubmoduleCommand = vscode.commands.registerCommand(
+	    'zegit-submodules-manager.deinitSpecificSubmodule', async function() {
+		    getSubmodules(rootPath, async (err, submodules) => {
+			    if (err) {
+				    vscode.window.showErrorMessage(
+				        `Erreur lors de la récupération des submodules : ${
+					        err.message}`);
+				    return;
+			    }
 
-  // Command: Deinitialize specific submodule
-  const deinitSpecificSubmoduleCommand = vscode.commands.registerCommand(
-    "zegit-submodules-manager.deinitSpecificSubmodule",
-    async function () {
-      exec(
-        "git config --file .gitmodules --name-only --get-regexp path",
-        { cwd: rootPath },
-        async (err, stdout, stderr) => {
-          if (err || stderr) {
-            vscode.window.showErrorMessage(
-              `Erreur lors de la récupération des submodules : ${stderr}`
-            );
-            return;
-          }
+			    if (submodules.length === 0) {
+				    vscode.window.showWarningMessage('Aucun submodule trouvé.');
+				    return;
+			    }
 
-          const submodules = stdout
-            .trim()
-            .split("\n")
-            .map((line) => line.replace("submodule.", "").replace(".path", ""));
+			    const selectedSubmodule =
+			        await vscode.window.showQuickPick(submodules, {
+				        placeHolder:
+				            'Sélectionnez le submodule à désinitialiser',
+			        });
 
-          if (submodules.length === 0) {
-            vscode.window.showWarningMessage("Aucun submodule trouvé.");
-            return;
-          }
+			    if (selectedSubmodule) {
+				    const command = `git submodule deinit ${selectedSubmodule}`;
+				    executeGitCommand(command, {cwd: rootPath}, (err) => {
+					    if (err) {
+						    vscode.window.showErrorMessage(
+						        `Erreur lors de la désinitialisation du submodule ${
+							        selectedSubmodule} : ${err.message}`);
+						    return;
+					    }
+					    vscode.window.showInformationMessage(`Le submodule ${
+						    selectedSubmodule} a été désinitialisé.`);
+					    submodulesProvider.refresh();
+				    });
+			    }
+		    });
+	    });
 
-          const selectedSubmodule = await vscode.window.showQuickPick(
-            submodules,
-            {
-              placeHolder: "Sélectionnez le submodule à désinitialiser",
-            }
-          );
-
-          if (selectedSubmodule) {
-            exec(
-              `git submodule deinit ${selectedSubmodule}`,
-              { cwd: rootPath },
-              (err, stdout, stderr) => {
-                if (err) {
-                  vscode.window.showErrorMessage(
-                    `Erreur lors de la désinitialisation du submodule ${selectedSubmodule} : ${stderr}`
-                  );
-                  return;
-                }
-                vscode.window.showInformationMessage(
-                  `Le submodule ${selectedSubmodule} a été désinitialisé.`
-                );
-                submodulesProvider.refresh(); // Refresh the TreeView after updating
-              }
-            );
-          }
-        }
-      );
-    }
-  );
-
-  // Register all commands
-  context.subscriptions.push(initAllSubmodulesCommand);
-  context.subscriptions.push(initSpecificSubmoduleCommand);
-  context.subscriptions.push(deinitAllSubmodulesCommand);
-  context.subscriptions.push(deinitSpecificSubmoduleCommand);
-  context.subscriptions.push(refreshSubmodulesCommand);
+	context.subscriptions.push(initAllSubmodulesCommand);
+	context.subscriptions.push(initSpecificSubmoduleCommand);
+	context.subscriptions.push(deinitAllSubmodulesCommand);
+	context.subscriptions.push(deinitSpecificSubmoduleCommand);
+	context.subscriptions.push(refreshSubmodulesCommand);
 }
 
-// This method is called when your extension is deactivated
-function deactivate() {}
+function deactivate() { }
 
 module.exports = {
-  activate,
-  deactivate,
+	activate,
+	deactivate,
 };
