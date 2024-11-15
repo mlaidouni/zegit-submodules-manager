@@ -35,33 +35,38 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "zegit-submodules-manager.refreshView",
+				"title": "Refresh view",
+				"category": "ZeGit"
+			},
+			{
 				"command": "zegit-submodules-manager.helloWorld",
 				"title": "Hello World",
 				"category": "ZeGit"
 			},
 			{
-				"command": "zegit-submodules-manager.initAllSubmodules",
-				"title": "Initialize All Submodules",
+				"command": "zegit-submodules-manager.updateAllSubmodules",
+				"title": "Update all submodules",
 				"category": "ZeGit"
 			},
 			{
-				"command": "zegit-submodules-manager.initSpecificSubmodule",
-				"title": "Initialize Specific Submodule",
+				"command": "zegit-submodules-manager.updateSelectedSubmodules",
+				"title": "Update selected submodules",
 				"category": "ZeGit"
 			},
 			{
 				"command": "zegit-submodules-manager.deinitAllSubmodules",
-				"title": "Deinitialize All Submodules",
+				"title": "Deinitialize all submodules",
 				"category": "ZeGit"
 			},
 			{
-				"command": "zegit-submodules-manager.deinitSpecificSubmodule",
-				"title": "Deinitialize Specific Submodule",
+				"command": "zegit-submodules-manager.deinitSelectedSubmodules",
+				"title": "Deinitialize selected submodules",
 				"category": "ZeGit"
 			},
 			{
-				"command": "zegit-submodules-manager.refreshSubmodules",
-				"title": "Refresh Submodules View",
+				"command": "zegit-submodules-manager.openSubmodule",
+				"title": "Open Submodule",
 				"category": "ZeGit"
 			}
 		],
@@ -96,5 +101,8 @@
 		"@vscode/test-electron": "^2.4.1",
 		"eslint": "^9.13.0",
 		"typescript": "^5.6.3"
-	}
+	},
+	"extensionDependencies": [
+		"vscode.git"
+	]
 }

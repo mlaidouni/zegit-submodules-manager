@@ -24,8 +24,7 @@ function activate(context) {
 	}
 
 	const rootPath = workspaceFolders[0].uri.fsPath;
-	const submodulesProvider = new SubmodulesProvider(rootPath);
-	// const submodulesProvider = new SubmodulesProvider(rootPath, git);
+	const submodulesProvider = new SubmodulesProvider(rootPath, git);
 
 	vscode.window.registerTreeDataProvider(
 	    'submodulesView', submodulesProvider);
@@ -33,20 +32,6 @@ function activate(context) {
 	const refreshSubmodulesCommand = vscode.commands.registerCommand(
 	    'zegit-submodules-manager.refreshSubmodules',
 	    () => submodulesProvider.refresh());
-
-	const openSubmoduleCommand = vscode.commands.registerCommand(
-	    'zegit-submodules-manager.openSubmodule', async function(element) {
-		    const submodulePath = element.label;
-		    const command = `code ${submodulePath}`;
-		    executeGitCommand(command, {cwd: rootPath}, (err) => {
-			    if (err) {
-				    vscode.window.showErrorMessage(
-				        `Erreur lors de l'ouverture du submodule : ${
-					        err.message}`);
-				    return;
-			    }
-		    });
-	    });
 
 	const initAllSubmodulesCommand = vscode.commands.registerCommand(
 	    'zegit-submodules-manager.initAllSubmodules', function() {
@@ -161,7 +146,6 @@ function activate(context) {
 	context.subscriptions.push(deinitAllSubmodulesCommand);
 	context.subscriptions.push(deinitSpecificSubmoduleCommand);
 	context.subscriptions.push(refreshSubmodulesCommand);
-	context.subscriptions.push(openSubmoduleCommand);
 }
 
 function deactivate() { }
